@@ -3,6 +3,7 @@ package com.example.join.service;
 import com.example.join.dto.Input;
 import com.example.join.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -17,4 +18,6 @@ public interface UserService {
 
 //    List<String>
     void downloadFiles(List<String> filePath, HttpServletResponse response);
+
+    String uploadFiles(MultipartFile[] file);
 }

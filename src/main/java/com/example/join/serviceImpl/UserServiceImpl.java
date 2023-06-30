@@ -11,6 +11,7 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.File;
@@ -86,5 +87,18 @@ public class UserServiceImpl implements UserService {
         }
         System.out.println("::::::::::::"+fileNames);
 //        return fileNames;
+    }
+
+    @Override
+    public String uploadFiles(MultipartFile[] files) {
+        for(MultipartFile file : files) {
+            String fileName = file.getOriginalFilename();
+            try {
+                file.transferTo(new File("D:\\img\\" + fileName));
+            } catch (IOException e) {
+                throw new UserNotFoundException("Unable to upload file");
+            }
+        }
+        return "Files uploaded successfully!!!";
     }
 }
