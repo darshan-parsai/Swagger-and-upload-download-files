@@ -19,8 +19,6 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private ProductService productService;
 
     @PostMapping("/save-user")
     public User saveWithProduct(@RequestBody Input input){
@@ -38,11 +36,14 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @GetMapping("download-multi-file")
-//    public ResponseEntity<List<String>>
+    @GetMapping("/download-multi-file")
     public void downloadFiles(@RequestParam List<String> filePath, HttpServletResponse response){
         System.out.println("Hii");
         userService.downloadFiles(filePath, response);
-//        return new ResponseEntity<>(userService.downloadFiles(filePath, response),HttpStatus.OK);
+    }
+
+    @PostMapping("/upload-multi-file")
+    public String uploadFiles(@RequestParam MultipartFile[] files){
+        return  userService.uploadFiles(files);
     }
 }
