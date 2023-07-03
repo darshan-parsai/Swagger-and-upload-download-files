@@ -46,4 +46,9 @@ public class UserController {
     public String uploadFiles(@RequestParam MultipartFile[] files){
         return  userService.uploadFiles(files);
     }
+
+    @GetMapping ("/download-by-url")
+    public String downloadByUrl(@RequestParam List<String> imageUrls){
+        return userService.downloadByUrl(imageUrls);
+    }
 }
