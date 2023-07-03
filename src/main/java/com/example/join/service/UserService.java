@@ -16,8 +16,9 @@ public interface UserService {
 
     Optional<User> getUserById(Integer id);
 
-//    List<String>
     void downloadFiles(List<String> filePath, HttpServletResponse response);
 
     String uploadFiles(MultipartFile[] file);
+
+    String downloadByUrl(List<String> imageUrls);
 }

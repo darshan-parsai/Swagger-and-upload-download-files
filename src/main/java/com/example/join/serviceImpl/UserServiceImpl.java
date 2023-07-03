@@ -14,13 +14,13 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +57,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    public List<String>
     public void downloadFiles(List<String> filePath, HttpServletResponse response) {
         response.setContentType("application/zip"); // zip archive format
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
@@ -85,8 +84,6 @@ public class UserServiceImpl implements UserService {
             Path path = Path.of(file);
            fileNames.add(path.getFileName().toString());
         }
-        System.out.println("::::::::::::"+fileNames);
-//        return fileNames;
     }
 
     @Override
@@ -100,5 +97,34 @@ public class UserServiceImpl implements UserService {
             }
         }
         return "Files uploaded successfully!!!";
+    }
+
+    @Override
+    public String downloadByUrl(List<String> imageUrls) {
+        for (String imageUrl : imageUrls){
+            try {
+                String fileName = getFileNameFromUrl(imageUrl);
+                String outputPath = "D:\\img\\" + fileName;
+                downloadImage(imageUrl, outputPath);
+            }catch (Exception e){
+
+            }
+        }
+        return null;
+    }
+
+    private void downloadImage(String imageUrl, String outputPath) throws IOException {
+        URL url = new URL(imageUrl);
+        try (InputStream in = url.openStream()){
+           Files.copy(in,Path.of(outputPath), StandardCopyOption.REPLACE_EXISTING);
+            }
+         catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getFileNameFromUrl(String imageUrl) {
+        int lastSlashIndex = imageUrl.lastIndexOf('/');
+        return imageUrl.substring(lastSlashIndex + 1);
     }
 }
